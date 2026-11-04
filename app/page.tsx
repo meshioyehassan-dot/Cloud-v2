@@ -39,11 +39,11 @@ export default function Page() {
         <h1>🎉 You scored N{score}</h1>
         <div style={{background:'#111',padding:'20px',borderRadius:'15px'}}>
           <p>Business Idea Unlocked!</p>
-          <a href="https://wa.me/2348012345678" style={{display:'block',background:'#00ff88',color:'#000',padding:'15px',borderRadius:'10px',textDecoration:'none',fontWeight:'bold'}}>Get Business Plan PDF</a>
+          <a href="https://wa.me/2347076882414" style={{display:'block',background:'#00ff88',color:'#000',padding:'15px',borderRadius:'10px',textDecoration:'none',fontWeight:'bold'}}>Get Business Plan PDF</a>
           <div style={{marginTop:'20px',borderTop:'1px solid #333',paddingTop:'20px'}}>
             <h3>💰 WANNA EARN LIKE ME?</h3>
             <p>I build AI game + site for 50k</p>
-            <a href="https://wa.me/2348012345678" style={{display:'block',background:'#ffcc00',color:'#000',padding:'15px',borderRadius:'10px',textDecoration:'none',fontWeight:'bold',marginTop:'10px'}}>PAY 50K - BUILD MY OWN</a>
+            <a href="https://wa.me/2347076882414" style={{display:'block',background:'#ffcc00',color:'#000',padding:'15px',borderRadius:'10px',textDecoration:'none',fontWeight:'bold',marginTop:'10px'}}>PAY 50K - BUILD MY OWN</a>
           </div>
           <button onClick={()=>{setTime(30);setWin(false);setScore(0);}} style={{marginTop:'20px',background:'#fff',color:'#000',padding:'10px 20px',borderRadius:'10px'}}>Play Again</button>
         </div>
