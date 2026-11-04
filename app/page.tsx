@@ -1,46 +1,64 @@
-"use client"
-import { useState } from "react"
+"use client";
+import { useState, useEffect } from "react";
 
 export default function Page() {
-  const [input, setInput] = useState("")
-  const [chats, setChats] = useState<{role:string, content:string}[]>([])
-  const [load, setLoad] = useState(false)
+  const [started, setStarted] = useState(false);
+  const [wa, setWa] = useState("");
+  const [score, setScore] = useState(0);
+  const [time, setTime] = useState(30);
+  const [win, setWin] = useState(false);
 
-  async function send(text?: string) {
-    const t = text || input
-    if(!t) return
-    setChats(prev => [...prev, {role:"user", content:t}])
-    setInput("")
-    setLoad(true)
-    try{
-      const r = await fetch("/api/chat",{method:"POST",body:JSON.stringify({messages:[{content:t}]})})
-      const d = await r.json()
-      setChats(c=>[...c,{role:"assistant",content:d.reply}])
-    }catch{
-      setChats(c=>[...c,{role:"assistant",content:"Network slow, try again CEO."}])
-    }
-    setLoad(false)
+  useEffect(() => {
+    if (!started || time <= 0) return;
+    const t = setInterval(() => setTime((x) => x - 1), 1000);
+    return () => clearInterval(t);
+  }, [started, time]);
+
+  useEffect(() => {
+    if (time === 0) setWin(true);
+  }, [time]);
+
+  if (!started) {
+    return (
+      <div style={{minHeight:'100vh',background:'#000',color:'#fff',padding:'20px',textAlign:'center'}}>
+        <h1>🚐 LAGOS HUSTLE EMPIRE</h1>
+        <p>Play, Learn, Win Airtime!</p>
+        <div style={{background:'#111',padding:'20px',borderRadius:'15px',marginTop:'20px'}}>
+          <p>✅ Real Lagos Business Ideas</p>
+          <p>✅ Win N1000 Weekly</p>
+          <input value={wa} onChange={(e)=>setWa(e.target.value)} placeholder="WhatsApp to play" style={{width:'90%',padding:'15px',borderRadius:'10px',marginTop:'15px',color:'#000'}} />
+          <button onClick={()=>wa.length>9&&setStarted(true)} style={{width:'90%',padding:'15px',background:'#00ff88',color:'#000',border:'none',borderRadius:'10px',marginTop:'10px',fontWeight:'bold'}}>START FREE</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (win) {
+    return (
+      <div style={{minHeight:'100vh',background:'#000',color:'#fff',padding:'20px',textAlign:'center'}}>
+        <h1>🎉 You scored N{score}</h1>
+        <div style={{background:'#111',padding:'20px',borderRadius:'15px'}}>
+          <p>Business Idea Unlocked!</p>
+          <a href="https://wa.me/2348012345678" style={{display:'block',background:'#00ff88',color:'#000',padding:'15px',borderRadius:'10px',textDecoration:'none',fontWeight:'bold'}}>Get Business Plan PDF</a>
+          <div style={{marginTop:'20px',borderTop:'1px solid #333',paddingTop:'20px'}}>
+            <h3>💰 WANNA EARN LIKE ME?</h3>
+            <p>I build AI game + site for 50k</p>
+            <a href="https://wa.me/2348012345678" style={{display:'block',background:'#ffcc00',color:'#000',padding:'15px',borderRadius:'10px',textDecoration:'none',fontWeight:'bold',marginTop:'10px'}}>PAY 50K - BUILD MY OWN</a>
+          </div>
+          <button onClick={()=>{setTime(30);setWin(false);setScore(0);}} style={{marginTop:'20px',background:'#fff',color:'#000',padding:'10px 20px',borderRadius:'10px'}}>Play Again</button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{background:"#050505", color:"#fff", minHeight:"100vh", padding:20, maxWidth:600, margin:"0 auto"}}>
-      <h1 style={{fontSize:30, fontWeight:900}}>CLOUD-V2 ☁️</h1>
-      <p style={{opacity:0.5, fontSize:14}}>Built by CEO Mickey • Lagos</p>
-
-      <div style={{display:"flex", gap:8, marginTop:20}}>
-        <button onClick={()=>send("Abeg explain AI for pidgin")} style={{flex:1, padding:12, borderRadius:10, background:"#1a1a1a", color:"#fff", border:"1px solid #333"}}>Explain AI in pidgin</button>
-        <button onClick={()=>send("Give me 3 business ideas for Lagos")} style={{flex:1, padding:12, borderRadius:10, background:"#fff", color:"#000", fontWeight:700}}>Business Ideas</button>
-      </div>
-
-      <div style={{marginTop:20, paddingBottom:100}}>
-        {chats.map((m,i)=><div key={i} style={{padding:14, margin:"10px 0", borderRadius:12, background: m.role==="user" ? "#111" : "#1c1c1c", border:"1px solid #222"}}>{m.content}</div>)}
-        {load && <div style={{opacity:0.5}}>CLOUDRAONE dey think...</div>}
-      </div>
-
-      <div style={{position:"fixed", bottom:15, left:15, right:15, maxWidth:570, margin:"0 auto", display:"flex", gap:10}}>
-        <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="What do you need?" style={{flex:1, padding:16, borderRadius:12, background:"#111", border:"1px solid #333", color:"#fff"}}/>
-        <button onClick={()=>send()} style={{padding:"0 22px", borderRadius:12, background:"#fff", color:"#000", fontWeight:800}}>Send</button>
+    <div style={{minHeight:'100vh',background:'#0a0a0a',color:'#fff',padding:'10px'}}>
+      <div style={{display:'flex',justifyContent:'space-between',padding:'10px'}}><span>Lvl 1</span><span>N{score}</span><span>{time}s</span></div>
+      <div style={{textAlign:'center',marginTop:'40px'}}>
+        <h2>🚐 TAP DANFO FAST!</h2>
+        <button onClick={()=>setScore(s=>s+50)} style={{width:'200px',height:'200px',borderRadius:'50%',background:'#ffcc00',fontSize:'60px',border:'none',marginTop:'30px'}}>🚐</button>
+        <p>Each Tap = N50</p>
       </div>
     </div>
-  )
-      }
+  );
+            }
